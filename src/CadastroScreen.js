@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import auth from '@react-native-firebase/auth';
 
 export default function CadastroScreen({navigation}) {
   const [email, setEmail] = useState('');
@@ -36,7 +37,7 @@ export default function CadastroScreen({navigation}) {
       return false;
     }
     if (user.senha.length < 6) {
-      alert('A senha deve ter ao menos 6 caracteres');
+      alert('A senha deve ter no mínimo 6 caracteres');
       senhaInput.focus();
       return false;
     }
@@ -54,11 +55,32 @@ export default function CadastroScreen({navigation}) {
     return true;
   }
 
-  function cadastro(user) {
+  async function cadastro(user) {
     if (!validar(user)) {
       return;
     }
+    try {
+      const registro = await auth().createUserWithEmailAndPassword(
+        user.email,
+        user.senha,
+      );
+      if (registro) {
+        /* const persiste = await auth().setPersistence(
+          auth.Auth.Persistence.LOCAL,
+        );
+        console.log(persiste);
+        if (persiste) {
+          await auth().signInWithEmailAndPassword(user.email, user.senha);
+          navigation.navigate('Login');
+        } */
+        navigation.navigate('Login');
+      }
+    } catch (e) {
+      alert('Não foi possível realizar o cadastro.');
+      console.log(e);
+    }
   }
+
   function telaLogin() {
     navigation.navigate('Login');
   }
