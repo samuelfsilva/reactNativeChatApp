@@ -65,14 +65,6 @@ export default function CadastroScreen({navigation}) {
         user.senha,
       );
       if (registro) {
-        /* const persiste = await auth().setPersistence(
-          auth.Auth.Persistence.LOCAL,
-        );
-        console.log(persiste);
-        if (persiste) {
-          await auth().signInWithEmailAndPassword(user.email, user.senha);
-          navigation.navigate('Login');
-        } */
         navigation.navigate('Login');
       }
     } catch (e) {

@@ -8,12 +8,14 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  let emailInput = null;
   let senhaInput = null;
 
   useEffect(() => {
@@ -28,15 +30,24 @@ export default function LoginScreen({navigation}) {
 
   function validar(user) {
     if (!user.email.length) {
-      alert('Informe o email.');
+      Alert.alert('Informação', 'Email não inserido.');
+      emailInput.focus();
+      return false;
+    }
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!reg.test(user.email)) {
+      Alert.alert('Informação', 'O email inserido não é válido.');
+      emailInput.focus();
       return false;
     }
     if (!user.senha.length) {
-      alert('Informe a senha.');
+      Alert.alert('Informação', 'Senha não inserida.');
+      senhaInput.focus();
       return false;
     }
     if (user.senha.length < 6) {
-      alert('A senha deve ter no mínimo 6 caracteres.');
+      Alert.alert('Informação', 'A senha deve ter no mínimo 6 caracteres.');
+      senhaInput.focus();
       return false;
     }
 
@@ -53,17 +64,11 @@ export default function LoginScreen({navigation}) {
         user.senha,
       );
       if (autentica) {
-        /* const persiste = await auth().setPersistence(
-          auth.Auth.Persistence.LOCAL,
-        );
-        if (persiste) {
-          await auth().signInWithEmailAndPassword(user.email, user.senha);
-          navigation.navigate('Login');
-        } */
         navigation.navigate('Contatos');
       }
     } catch (e) {
-      alert('Email ou senha incorretos.');
+      Alert.alert('Informação', 'Email ou senha incorretos.');
+      emailInput.focus();
     }
   }
   function telaCadastro() {
@@ -79,6 +84,9 @@ export default function LoginScreen({navigation}) {
           style={styles.entrada}
           placeholder={'E-mail'}
           onChangeText={text => setEmail(text)}
+          ref={input => {
+            emailInput = input;
+          }}
           value={email}
           returnKeyType="next"
           keyboardType="email-address"
