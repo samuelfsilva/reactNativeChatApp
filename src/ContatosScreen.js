@@ -1,81 +1,45 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, Button, StyleSheet, FlatList, Image} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {Icon} from 'react-native-elements';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {NavigationContainer} from '@react-navigation/native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  Text,
+  View,
+  Button,
+  StyleSheet,
+  FlatList,
+  Image,
+  Alert,
+} from 'react-native';
 
 export default function ContatosScreen({navigation}) {
   const [contatos, setContatos] = useState({});
-  const data = [
-    {
-      id: 1,
-      photoURI:
-        'https://imgix.bustle.com/uploads/image/2018/5/9/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG',
-      nome: 'João',
-    },
-    {
-      id: 2,
-      photoURI:
-        'https://imgix.bustle.com/uploads/image/2018/5/9/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG',
-      nome: 'Carlos',
-    },
-    {
-      id: 3,
-      photoURI:
-        'https://imgix.bustle.com/uploads/image/2018/5/9/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG',
-      nome: 'Maria',
-    },
-    {
-      id: 4,
-      photoURI:
-        'https://imgix.bustle.com/uploads/image/2018/5/9/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG',
-      nome: 'Valéria',
-    },
-    {
-      id: 5,
-      photoURI:
-        'https://imgix.bustle.com/uploads/image/2018/5/9/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG',
-      nome: 'Rosa',
-    },
-    {
-      id: 6,
-      photoURI:
-        'https://imgix.bustle.com/uploads/image/2018/5/9/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG',
-      nome: 'Rosa',
-    },
-    {
-      id: 7,
-      photoURI:
-        'https://imgix.bustle.com/uploads/image/2018/5/9/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG',
-      nome: 'Rosa',
-    },
-    {
-      id: 8,
-      photoURI:
-        'https://imgix.bustle.com/uploads/image/2018/5/9/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG',
-      nome: 'Rosa',
-    },
-    {
-      id: 9,
-      photoURI:
-        'https://imgix.bustle.com/uploads/image/2018/5/9/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG',
-      nome: 'Rosa',
-    },
-    {
-      id: 10,
-      photoURI:
-        'https://imgix.bustle.com/uploads/image/2018/5/9/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG',
-      nome: 'Rosa',
-    },
-  ];
-  useEffect(() => {
-    const userId = auth().currentUser.userId;
-    const contato = database().ref(`/usuarios/${userId}/contatos`);
-    contato.on('value', snapshot => {
-      setContatos(snapshot.val());
-      console.log(snapshot.val());
-    });
+
+  navigation.setOptions({
+    headerLeft: () => (
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Icon name="menu" style={styles.menuIcon} />
+      </TouchableOpacity>
+    ),
   });
+
+  /* useEffect(() => {
+    try {
+      const userId = auth().currentUser.uid;
+      database()
+        .ref(`/usuarios/${userId}/contatos`)
+        .once('value', function(snapshot) {
+          setContatos(snapshot.val());
+          //setContatos({});
+        });
+    } catch (e) {
+      console.log('Erro ao conectar com o banco.');
+    }
+  }); */
 
   const renderLinha = contato => {
     const {photoURI, nome} = contato.item;
@@ -91,6 +55,24 @@ export default function ContatosScreen({navigation}) {
     );
   };
 
+  const renderLista = function() {
+    return (
+      <FlatList
+        data={contatos}
+        keyExtractor={item => item.id.toString()}
+        renderItem={renderLinha}
+      />
+    );
+  };
+
+  const renderVazio = function() {
+    return (
+      <View style={styles.listaVazia}>
+        <Text style={styles.textoListaVazia}>Nenhum contato cadastrado.</Text>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.tela}>
       <Text>Bem vindo, {auth().currentUser.email}</Text>
@@ -101,11 +83,7 @@ export default function ContatosScreen({navigation}) {
           navigation.pop();
         }}
       />
-      <FlatList
-        data={data}
-        keyExtractor={item => item.id.toString()}
-        renderItem={renderLinha}
-      />
+      {contatos.length > 0 ? renderLista() : renderVazio()}
     </SafeAreaView>
   );
 }
@@ -142,5 +120,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 10,
     fontWeight: 'bold',
+  },
+  listaVazia: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textoListaVazia: {
+    fontSize: 18,
+    fontWeight: '400',
+    color: 'gray',
+  },
+  menuIcon: {
+    marginLeft: 15,
   },
 });

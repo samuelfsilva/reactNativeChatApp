@@ -18,13 +18,18 @@ export default function LoginScreen({navigation}) {
   let emailInput = null;
   let senhaInput = null;
 
+  navigation.setOptions({
+    title: 'Login',
+    drawerLockMode: 'locked-closed',
+  });
+
   useEffect(() => {
     isLogged();
   });
 
   function isLogged() {
     if (auth().currentUser) {
-      navigation.navigate('Contatos');
+      navigation.replace('Home');
     }
   }
 
@@ -64,7 +69,7 @@ export default function LoginScreen({navigation}) {
         user.senha,
       );
       if (autentica) {
-        navigation.navigate('Contatos');
+        navigation.replace('Home');
       }
     } catch (e) {
       Alert.alert('Informação', 'Email ou senha incorretos.');

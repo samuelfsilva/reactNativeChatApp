@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 
@@ -19,35 +20,43 @@ export default function CadastroScreen({navigation}) {
   let senhaInput = null;
   let confirmaSenhaInput = null;
 
+  navigation.setOptions({
+    title: 'Cadastro',
+    drawerLockMode: 'locked-closed',
+  });
+
   function validar(user) {
     if (!user.email.length) {
-      alert('Informe um email');
+      Alert.alert('Informação', 'Informe um email');
       emailInput.focus();
       return false;
     }
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!reg.test(user.email)) {
-      alert('Informe um email válido');
+      Alert.alert('Informação', 'Informe um email válido');
       emailInput.focus();
       return false;
     }
     if (!user.senha.length) {
-      alert('Informe uma senha');
+      Alert.alert('Informação', 'Informe uma senha');
       senhaInput.focus();
       return false;
     }
     if (user.senha.length < 6) {
-      alert('A senha deve ter no mínimo 6 caracteres');
+      Alert.alert('Informação', 'A senha deve ter no mínimo 6 caracteres');
       senhaInput.focus();
       return false;
     }
     if (!user.confirmaSenha.length) {
-      alert('Informe a confirmação de senha');
+      Alert.alert('Informação', 'Informe a confirmação de senha');
       confirmaSenhaInput.focus();
       return false;
     }
     if (user.senha !== user.confirmaSenha) {
-      alert('A senha não pode ser diferente da confirmação');
+      Alert.alert(
+        'Informação',
+        'A senha não pode ser diferente da confirmação',
+      );
       confirmaSenhaInput.focus();
       return false;
     }
@@ -68,7 +77,7 @@ export default function CadastroScreen({navigation}) {
         navigation.navigate('Login');
       }
     } catch (e) {
-      alert('Não foi possível realizar o cadastro.');
+      Alert.alert('Informação', 'Não foi possível realizar o cadastro.');
       console.log(e);
     }
   }
