@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Icon} from 'react-native-elements';
+import {Icon, Header} from 'react-native-elements';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -15,31 +15,28 @@ import {
   Image,
   Alert,
 } from 'react-native';
+import HeaderComponent from './components/HeaderComponent';
 
 export default function ContatosScreen({navigation}) {
   const [contatos, setContatos] = useState({});
 
-  navigation.setOptions({
-    headerLeft: () => (
-      <TouchableOpacity onPress={() => navigation.openDrawer()}>
-        <Icon name="menu" style={styles.menuIcon} />
-      </TouchableOpacity>
-    ),
-  });
-
-  /* useEffect(() => {
+  useEffect(() => {
     try {
       const userId = auth().currentUser.uid;
       database()
         .ref(`/usuarios/${userId}/contatos`)
         .once('value', function(snapshot) {
           setContatos(snapshot.val());
-          //setContatos({});
+          console.log('consulta');
         });
     } catch (e) {
       console.log('Erro ao conectar com o banco.');
     }
-  }); */
+  });
+
+  const abrirDrawer = () => {
+    navigation.openDrawer();
+  };
 
   const renderLinha = contato => {
     const {photoURI, nome} = contato.item;
@@ -75,14 +72,7 @@ export default function ContatosScreen({navigation}) {
 
   return (
     <SafeAreaView style={styles.tela}>
-      <Text>Bem vindo, {auth().currentUser.email}</Text>
-      <Button
-        title="Sair"
-        onPress={() => {
-          auth().signOut();
-          navigation.pop();
-        }}
-      />
+      <HeaderComponent botaoMenu={abrirDrawer} title="CONTATOS" />
       {contatos.length > 0 ? renderLista() : renderVazio()}
     </SafeAreaView>
   );

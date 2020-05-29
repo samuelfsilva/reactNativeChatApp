@@ -7,14 +7,16 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import LoginScreen from './src/LoginScreen';
 import CadastroScreen from './src/CadastroScreen';
 import ContatosScreen from './src/ContatosScreen';
+import ProfileScreen from './src/ProfileScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function Home() {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator initialRouteName="Contatos">
       <Drawer.Screen name="Contatos" component={ContatosScreen} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
     </Drawer.Navigator>
   );
 }
@@ -25,7 +27,11 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Cadastro" component={CadastroScreen} />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
