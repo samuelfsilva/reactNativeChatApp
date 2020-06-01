@@ -1,6 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Icon, Header} from 'react-native-elements';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -12,34 +10,42 @@ import {
   Button,
   StyleSheet,
   FlatList,
+  RefreshControl,
   Image,
   Alert,
 } from 'react-native';
 import HeaderComponent from './components/HeaderComponent';
+import CloudFirestore from './components/CloudFirestore';
 
 export default function ContatosScreen({navigation}) {
-  const [contatos, setContatos] = useState({});
+  const [contatos, setContatos] = useState([]);
+  const [carregando, setCarregando] = useState(false);
 
   useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async function() {
+    setCarregando(true);
     try {
-      const userId = auth().currentUser.uid;
-      database()
-        .ref(`/usuarios/${userId}/contatos`)
-        .once('value', function(snapshot) {
-          setContatos(snapshot.val());
-          console.log('consulta');
-        });
+      const usuario = await CloudFirestore();
+      var collContatos = await usuario.collection('contatos');
+      const teste = await collContatos.onSnapshot(async querySnapshot => {
+        setContatos(await querySnapshot.docs);
+      });
+      setCarregando(false);
     } catch (e) {
       console.log('Erro ao conectar com o banco.');
     }
-  });
+  };
 
   const abrirDrawer = () => {
     navigation.openDrawer();
   };
 
-  const renderLinha = contato => {
-    const {photoURI, nome} = contato.item;
+  const renderLinha = item => {
+    var contato = item.item.data();
+    const {photoURI, nome} = contato;
     return (
       <View style={styles.item}>
         <View style={styles.itemContato}>
@@ -56,8 +62,11 @@ export default function ContatosScreen({navigation}) {
     return (
       <FlatList
         data={contatos}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item.id}
         renderItem={renderLinha}
+        refreshControl={
+          <RefreshControl refreshing={carregando} onRefresh={getData} />
+        }
       />
     );
   };
