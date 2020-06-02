@@ -1,18 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Icon, Header} from 'react-native-elements';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import {NavigationContainer} from '@react-navigation/native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
   Text,
   View,
-  Button,
   StyleSheet,
   FlatList,
   RefreshControl,
   Image,
-  Alert,
 } from 'react-native';
 import HeaderComponent from './components/HeaderComponent';
 import CloudFirestore from './components/CloudFirestore';
@@ -28,23 +22,23 @@ export default function ContatosScreen({navigation}) {
   const getData = async function() {
     setCarregando(true);
     try {
-      const usuario = await CloudFirestore();
-      var collContatos = await usuario.collection('contatos');
-      const teste = await collContatos.onSnapshot(async querySnapshot => {
-        setContatos(await querySnapshot.docs);
+      const usuarioContatos = (await CloudFirestore()).collection('contatos');
+      await usuarioContatos.onSnapshot(documentSnapshot => {
+        setContatos(documentSnapshot.docs);
       });
-      setCarregando(false);
     } catch (e) {
-      console.log('Erro ao conectar com o banco.');
+      console.log('Error ao receber dados.');
     }
+    setCarregando(false);
   };
 
   const abrirDrawer = () => {
     navigation.openDrawer();
   };
 
-  const renderLinha = item => {
-    var contato = item.item.data();
+  const renderLinha = ({item}) => {
+    var contato = item.data();
+
     const {photoURI, nome} = contato;
     return (
       <View style={styles.item}>
@@ -62,7 +56,7 @@ export default function ContatosScreen({navigation}) {
     return (
       <FlatList
         data={contatos}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item._data.id}
         renderItem={renderLinha}
         refreshControl={
           <RefreshControl refreshing={carregando} onRefresh={getData} />
