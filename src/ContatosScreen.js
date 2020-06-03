@@ -13,23 +13,35 @@ import CloudFirestore from './components/CloudFirestore';
 
 export default function ContatosScreen({navigation}) {
   const [contatos, setContatos] = useState([]);
-  const [carregando, setCarregando] = useState(false);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     getData();
   }, []);
 
   const getData = async function() {
-    setCarregando(true);
     try {
       const usuarioContatos = (await CloudFirestore()).collection('contatos');
-      await usuarioContatos.onSnapshot(documentSnapshot => {
-        setContatos(documentSnapshot.docs);
+      usuarioContatos.onSnapshot(documentSnapshot => {
+        var snapDocs = documentSnapshot.docs;
+
+        const getItems = snapDocs.map(docs => {
+          var ref = docs.data().usuario;
+          return ref.get();
+        });
+
+        Promise.all(getItems).then(docs => {
+          var lista = [];
+          docs.map(values => {
+            lista.push(values.data());
+          });
+          setContatos(lista);
+          setCarregando(false);
+        });
       });
     } catch (e) {
-      console.log('Error ao receber dados.');
+      console.log('Error ao receber dados.', e);
     }
-    setCarregando(false);
   };
 
   const abrirDrawer = () => {
@@ -37,26 +49,37 @@ export default function ContatosScreen({navigation}) {
   };
 
   const renderLinha = ({item}) => {
-    var contato = item.data();
+    try {
+      var contato = item;
+      var {photoURI = '', nome = 'Carregando...'} = contato;
 
-    const {photoURI, nome} = contato;
-    return (
-      <View style={styles.item}>
-        <View style={styles.itemContato}>
-          <Image style={styles.userPhoto} source={{uri: photoURI}} />
-          <View style={styles.subItem}>
-            <Text style={styles.userNome}>{nome}</Text>
+      return (
+        <View style={styles.item}>
+          <View style={styles.itemContato}>
+            <Image
+              style={styles.userPhoto}
+              source={
+                photoURI.length > 0
+                  ? {uri: photoURI}
+                  : require('../assets/profile.png')
+              }
+            />
+            <View style={styles.subItem}>
+              <Text style={styles.userNome}>{nome}</Text>
+            </View>
           </View>
         </View>
-      </View>
-    );
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const renderLista = function() {
     return (
       <FlatList
         data={contatos}
-        keyExtractor={item => item._data.id}
+        keyExtractor={item => item.email}
         renderItem={renderLinha}
         refreshControl={
           <RefreshControl refreshing={carregando} onRefresh={getData} />
@@ -65,18 +88,29 @@ export default function ContatosScreen({navigation}) {
     );
   };
 
-  const renderVazio = function() {
+  const renderMensagem = function(mensagem) {
     return (
       <View style={styles.listaVazia}>
-        <Text style={styles.textoListaVazia}>Nenhum contato cadastrado.</Text>
+        <Text style={styles.textoListaVazia}>{mensagem}</Text>
       </View>
     );
   };
 
+  if (carregando) {
+    return (
+      <SafeAreaView style={styles.tela}>
+        <HeaderComponent botaoMenu={abrirDrawer} title="CONTATOS" />
+        {renderMensagem('Carregando...')}
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.tela}>
       <HeaderComponent botaoMenu={abrirDrawer} title="CONTATOS" />
-      {contatos.length > 0 ? renderLista() : renderVazio()}
+      {contatos.length > 0
+        ? renderLista()
+        : renderMensagem('Nenhum contato encontrado.')}
     </SafeAreaView>
   );
 }
