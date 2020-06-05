@@ -3,6 +3,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
+import DrawerContent from './src/components/DrawerContent';
+
 /* Telas */
 import LoginScreen from './src/LoginScreen';
 import CadastroScreen from './src/CadastroScreen';
@@ -14,7 +16,9 @@ const Drawer = createDrawerNavigator();
 
 function Home() {
   return (
-    <Drawer.Navigator initialRouteName="Contatos">
+    <Drawer.Navigator
+      initialRouteName="Contatos"
+      drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name="Contatos" component={ContatosScreen} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
     </Drawer.Navigator>

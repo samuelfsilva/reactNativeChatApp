@@ -27,6 +27,7 @@ export default function ContatosScreen({navigation}) {
 
         const getItems = snapDocs.map(docs => {
           var ref = docs.data().usuario;
+          console.log('getItems ');
           return ref.get();
         });
 
