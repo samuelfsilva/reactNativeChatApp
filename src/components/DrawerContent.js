@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {Avatar, Icon} from 'react-native-elements';
 import {DrawerItem} from '@react-navigation/drawer';
-import CloudFirestore from './CloudFirestore';
+import database from './database';
 
 export default function DrawerContent(props) {
   const [usuario, setUsuario] = useState({});
@@ -11,7 +11,7 @@ export default function DrawerContent(props) {
     '?alt=media&token=ec119b25-0fee-4561-8dcc-53cac389b7f2';
 
   async function getData() {
-    var user = await CloudFirestore();
+    var user = await database.userData();
     try {
       user.get().then(value => {
         console.log(value.data());
