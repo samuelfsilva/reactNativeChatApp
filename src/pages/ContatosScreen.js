@@ -8,8 +8,8 @@ import {
   RefreshControl,
   Image,
 } from 'react-native';
-import HeaderComponent from './components/HeaderComponent';
-import database from '././components/database';
+import HeaderComponent from '../components/HeaderComponent';
+import database from '../database/database';
 
 export default function ContatosScreen({navigation}) {
   const [contatos, setContatos] = useState([]);
@@ -21,7 +21,9 @@ export default function ContatosScreen({navigation}) {
 
   const getData = async function() {
     try {
-      const usuarioContatos = (await database.userData()).collection('contatos');
+      const usuarioContatos = (await database.userData()).collection(
+        'contatos',
+      );
       usuarioContatos.onSnapshot(documentSnapshot => {
         var snapDocs = documentSnapshot.docs;
 
@@ -61,7 +63,7 @@ export default function ContatosScreen({navigation}) {
               source={
                 photoURI.length > 0
                   ? {uri: photoURI}
-                  : require('../assets/profile.png')
+                  : require('../assets/images/profile.png')
               }
             />
             <View style={styles.subItem}>

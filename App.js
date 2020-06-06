@@ -6,10 +6,10 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import DrawerContent from './src/components/DrawerContent';
 
 /* Telas */
-import LoginScreen from './src/LoginScreen';
-import CadastroScreen from './src/CadastroScreen';
-import ContatosScreen from './src/ContatosScreen';
-import ProfileScreen from './src/ProfileScreen';
+import LoginScreen from './src/pages/LoginScreen';
+import CadastroScreen from './src/pages/CadastroScreen';
+import ContatosScreen from './src/pages/ContatosScreen';
+import ProfileScreen from './src/pages/ProfileScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();

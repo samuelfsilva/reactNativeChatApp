@@ -82,7 +82,10 @@ export default function LoginScreen({navigation}) {
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.tela}>
       <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={require('../assets/logo.png')} />
+        <Image
+          style={styles.logo}
+          source={require('../assets/images/logo.png')}
+        />
       </View>
       <View style={styles.form}>
         <TextInput

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {Avatar, Icon} from 'react-native-elements';
 import {DrawerItem} from '@react-navigation/drawer';
-import database from './database';
+import database from '../database/database';
 
 export default function DrawerContent(props) {
   const [usuario, setUsuario] = useState({});
@@ -12,6 +12,8 @@ export default function DrawerContent(props) {
 
   async function getData() {
     var user = await database.userData();
+    var auth = await database.userAuth();
+    console.log(auth);
     try {
       user.get().then(value => {
         console.log(value.data());

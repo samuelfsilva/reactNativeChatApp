@@ -10,7 +10,7 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import HeaderComponent from './components/HeaderComponent';
+import HeaderComponent from '../components/HeaderComponent';
 import auth from '@react-native-firebase/auth';
 
 export default function ProfileScreen({navigation}) {
