@@ -46,10 +46,6 @@ export default function ContatosScreen({navigation}) {
     }
   };
 
-  const abrirDrawer = () => {
-    navigation.openDrawer();
-  };
-
   const renderLinha = ({item}) => {
     try {
       var contato = item;
@@ -101,7 +97,7 @@ export default function ContatosScreen({navigation}) {
   if (carregando) {
     return (
       <SafeAreaView style={styles.tela}>
-        <HeaderComponent botaoMenu={abrirDrawer} title="CONTATOS" />
+        <HeaderComponent {...navigation} title="CONTATOS" />
         {renderMensagem('Carregando...')}
       </SafeAreaView>
     );
@@ -109,7 +105,7 @@ export default function ContatosScreen({navigation}) {
 
   return (
     <SafeAreaView style={styles.tela}>
-      <HeaderComponent botaoMenu={abrirDrawer} title="CONTATOS" />
+      <HeaderComponent {...navigation} title="CONTATOS" />
       {contatos.length > 0
         ? renderLista()
         : renderMensagem('Nenhum contato encontrado.')}

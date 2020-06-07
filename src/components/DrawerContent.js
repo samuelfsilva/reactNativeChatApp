@@ -47,7 +47,7 @@ export default function DrawerContent(props) {
           overlayContainerStyle={styles.avatar}
         />
         <View style={styles.avatarDetalhes}>
-        <Text style={styles.avatarNome}>{usuario.nome}</Text>
+          <Text style={styles.avatarNome}>{usuario.nome}</Text>
           <Text style={styles.avatarStatus}>{usuario.email}</Text>
         </View>
       </View>
@@ -55,6 +55,14 @@ export default function DrawerContent(props) {
         <DrawerItem
           icon={() => <Icon name="home" />}
           label="Início"
+          labelStyle={styles.itemMenu}
+          onPress={() => {
+            props.navigation.navigate('Conversas');
+          }}
+        />
+        <DrawerItem
+          icon={() => <Icon name="people" />}
+          label="Contatos"
           labelStyle={styles.itemMenu}
           onPress={() => {
             props.navigation.navigate('Contatos');

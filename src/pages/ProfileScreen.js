@@ -11,21 +11,28 @@ import {
   Alert,
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
-import auth from '@react-native-firebase/auth';
+import database from '../database/database';
 
 export default function ProfileScreen({navigation}) {
-  const abrirDrawer = () => {
-    navigation.openDrawer();
-  };
+  const [usuario, setUsuario] = useState({});
+
+  async function getData() {
+    const user = await database.userAuth();
+    setUsuario(user);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <SafeAreaView style={styles.tela}>
-      <HeaderComponent botaoMenu={abrirDrawer} title="PROFILE" />
-      <Text>Bem vindo, {auth().currentUser.email}</Text>
+      {/* <HeaderComponent botaoMenu={abrirDrawer} title="PROFILE" /> */}
+      <HeaderComponent {...navigation} title="PROFILE" />
+      <Text>Bem vindo, {usuario.email}</Text>
       <Button
         title="Sair da Conta"
         onPress={() => {
-          auth().signOut();
           navigation.pop();
         }}
       />

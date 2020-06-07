@@ -10,6 +10,7 @@ import LoginScreen from './src/pages/LoginScreen';
 import CadastroScreen from './src/pages/CadastroScreen';
 import ContatosScreen from './src/pages/ContatosScreen';
 import ProfileScreen from './src/pages/ProfileScreen';
+import ConversasScreen from './src/pages/ConversasScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -17,10 +18,11 @@ const Drawer = createDrawerNavigator();
 function Home() {
   return (
     <Drawer.Navigator
-      initialRouteName="Contatos"
+      initialRouteName="Conversas"
       drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name="Contatos" component={ContatosScreen} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="Conversas" component={ConversasScreen} />
     </Drawer.Navigator>
   );
 }

@@ -3,10 +3,15 @@ import {Header} from 'react-native-elements';
 import {StyleSheet} from 'react-native';
 
 export default function HeaderComponent(props) {
-  const {botaoMenu, title} = props;
+  const {openDrawer, title} = props;
+
   return (
     <Header
-      leftComponent={{icon: 'menu', onPress: botaoMenu, color: '#000'}}
+      leftComponent={{
+        icon: 'menu',
+        onPress: openDrawer,
+        color: '#000',
+      }}
       placement="left"
       centerComponent={{
         text: title,
