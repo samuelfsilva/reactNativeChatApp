@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "89889510332",
+    "firebase_url": "https://chat-ab87a.firebaseio.com",
+    "project_id": "chat-ab87a",
+    "storage_bucket": "chat-ab87a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89889510332:android:14fbbf1c75ff7b100c11b9",
+        "android_client_info": {
+          "package_name": "com.reactnativechatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89889510332-1odlcnc7nmi5c5ebekvglip6cqoc3dcn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reactnativechatapp",
+            "certificate_hash": "e97b964029a1aeea812afdd267fe31432248d4db"
+          }
+        },
+        {
+          "client_id": "89889510332-vs9lkd5vqvj0ri5erueh7fj7rh3nfshs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reactnativechatapp",
+            "certificate_hash": "486682dca73321162c78260b2e3f31b9094abb00"
+          }
+        },
+        {
+          "client_id": "89889510332-k1ofpd148sbmp996b6t92q8hiks4lch2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6J0TbbDPL2ptUBriiasTy1NyAqSuc9V0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89889510332-k1ofpd148sbmp996b6t92q8hiks4lch2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
