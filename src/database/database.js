@@ -1,18 +1,40 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
+var currentUser;
+
 const database = {
   async userAuth() {
-    return await auth().currentUser;
+    if (currentUser) {
+      return currentUser;
+    }
+    else {
+      currentUser = await auth().currentUser;
+      return currentUser;
+    }
   },
   async userData() {
     try {
-      const currentUser = await auth().currentUser;
+      this.userAuth();
       const usersCollection = await firestore()
         .collection('usuarios')
         .doc(currentUser.uid);
 
       return usersCollection;
+    } catch (e) {
+      console.log('Erro no componente.');
+      console.log(e);
+    }
+  },
+  async userTalks() {
+    try {
+      this.userAuth();
+      const userTalks = await firestore()
+        .collection('conversas')
+        .doc(currentUser.uid)
+        .collection('linhas');
+
+      return userTalks;
     } catch (e) {
       console.log('Erro no componente.');
       console.log(e);

@@ -12,11 +12,14 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 
+import database from '../database/database';
+
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   let emailInput = null;
   let senhaInput = null;
+
 
   navigation.setOptions({
     title: 'Login',
@@ -28,7 +31,8 @@ export default function LoginScreen({navigation}) {
   });
 
   function isLogged() {
-    if (auth().currentUser) {
+    var userAuth = database.userAuth();
+    if (userAuth) {
       navigation.replace('Home');
     }
   }

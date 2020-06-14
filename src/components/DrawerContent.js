@@ -13,10 +13,9 @@ export default function DrawerContent(props) {
   async function getData() {
     var user = await database.userData();
     var auth = await database.userAuth();
-    console.log(auth);
+
     try {
       user.get().then(value => {
-        console.log(value.data());
         setUsuario(value.data());
       });
     } catch (e) {
