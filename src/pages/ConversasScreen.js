@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import database from '../database/database';
+import { concat } from 'react-native-reanimated';
 
 export default function ConversasScreen({navigation}) {
   const [contatos, setContatos] = useState([]);
@@ -24,22 +25,31 @@ export default function ConversasScreen({navigation}) {
       const usuarioContatos = (await database.userData()).collection(
         'contatos',
       );
-      usuarioContatos.onSnapshot(documentSnapshot => {
-        var snapDocs = documentSnapshot.docs;
-
-        const getItems = snapDocs.map(docs => {
-          var ref = docs.data().usuario;
+      const userTalks = await database.userTalks();
+      userTalks.onSnapshot(querySnapshot => {
+        let destinatarios = querySnapshot.docs.map(values => {
+          let ref = values.data().destinatario;
           return ref.get();
         });
 
-        Promise.all(getItems).then(docs => {
-          var lista = [];
+        Promise.all(destinatarios).then(docs => {
+          let lista = [];
           docs.map(values => {
-            lista.push(values.data());
+            lista.push({...values.data(), uid: values.ref._documentPath._parts[1]});
           });
           setContatos(lista);
           setCarregando(false);
         });
+        /* let docRef = querySnapshot.docChanges();
+        docRef.forEach(docs => {
+          let a = docs;
+          let d = docs.doc.ref;
+          d.collection('mensagens').get().then(v => {
+            v.docs.forEach(texto => {
+              console.log('2 >> ', texto.data());
+            });
+          });
+        }); */
       });
     } catch (e) {
       console.log('Error ao receber dados.', e);

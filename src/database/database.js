@@ -29,9 +29,8 @@ const database = {
   async userTalks() {
     try {
       this.userAuth();
-      const userTalks = await firestore()
-        .collection('conversas')
-        .doc(currentUser.uid)
+      var userTalks = firestore()
+        .doc(`conversas/${currentUser.uid}`)
         .collection('linhas');
 
       return userTalks;
