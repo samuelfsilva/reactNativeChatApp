@@ -11,6 +11,7 @@ import {
 import HeaderComponent from '../components/HeaderComponent';
 import database from '../database/database';
 import { concat } from 'react-native-reanimated';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function ConversasScreen({navigation}) {
   const [contatos, setContatos] = useState([]);
@@ -59,24 +60,26 @@ export default function ConversasScreen({navigation}) {
   const renderLinha = ({item}) => {
     try {
       var contato = item;
-      var {photoURI = '', nome = 'Carregando...'} = contato;
+      var {photoURI = '', nome = 'Carregando...', uid} = contato;
 
       return (
-        <View style={styles.item}>
-          <View style={styles.itemContato}>
-            <Image
-              style={styles.userPhoto}
-              source={
-                photoURI.length > 0
-                  ? {uri: photoURI}
-                  : require('../assets/images/profile.png')
-              }
-            />
-            <View style={styles.subItem}>
-              <Text style={styles.userNome}>{nome}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Chat', {uid})}>
+          <View style={styles.item}>
+            <View style={styles.itemContato}>
+              <Image
+                style={styles.userPhoto}
+                source={
+                  photoURI.length > 0
+                    ? {uri: photoURI}
+                    : require('../assets/images/profile.png')
+                }
+              />
+              <View style={styles.subItem}>
+                <Text style={styles.userNome}>{nome}</Text>
+              </View>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       );
     } catch (e) {
       console.log(e);
