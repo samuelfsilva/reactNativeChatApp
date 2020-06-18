@@ -63,7 +63,7 @@ export default function ConversasScreen({navigation}) {
       var {photoURI = '', nome = 'Carregando...', uid} = contato;
 
       return (
-        <TouchableOpacity onPress={() => navigation.navigate('Chat', {uid})}>
+        <TouchableOpacity onPress={() => navigation.navigate('Chat', {uid, photoURI, nome})}>
           <View style={styles.item}>
             <View style={styles.itemContato}>
               <Image
